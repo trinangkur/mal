@@ -1,4 +1,4 @@
-const { List, Vector } = require('./types');
+const { List, Vector, NIL } = require('./types');
 
 const tokenize = (str) => {
   const tokenizeRegexp = /[\s,]*(~@|[\[\]{}()'`~^@]|"(?:\\.|[^\\"])*"?|;.*|[^\s\[\]{}('"`,;)]*)/g;
@@ -48,7 +48,7 @@ const read_list = (reader) => {
 const read_vector = (reader) => {
   const ast = read_ast(reader, ']');
   return new Vector(ast);
-}
+};
 
 const read_atom = (reader) => {
   const token = reader.next();
@@ -59,6 +59,10 @@ const read_atom = (reader) => {
 
   if (token.match(/^-?[0-9][0-9.]*$/)) {
     return parseFloat(token);
+  }
+
+  if (token === 'nil') {
+    return NIL;
   }
 
   return token;

@@ -8,6 +8,12 @@ const pr_str = (val) => {
   return val.toString();
 };
 
+const NilValue = class extends MalValue {
+  pr_str() {
+    return 'nil';
+  }
+};
+
 const List = class extends MalValue {
   constructor(ast) {
     super();
@@ -30,4 +36,6 @@ const Vector = class extends MalValue {
   }
 };
 
-module.exports = { List, Vector, pr_str };
+const NIL = new NilValue();
+
+module.exports = { List, Vector, NIL, pr_str };
