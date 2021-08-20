@@ -23,6 +23,10 @@ const List = class extends MalValue {
   pr_str(print_readably = false) {
     return `(${this.ast.map(pr_str).join(' ')})`;
   }
+
+  isEmpty() {
+    return this.ast.length === 0;
+  }
 };
 
 const Vector = class extends MalValue {
@@ -33,6 +37,10 @@ const Vector = class extends MalValue {
 
   pr_str(print_readably = false) {
     return `[${this.ast.map(pr_str).join(' ')}]`;
+  }
+
+  isEmpty() {
+    return this.ast.length === 0;
   }
 };
 
@@ -94,6 +102,10 @@ const Hashmap = class extends MalValue {
       .join(' ');
 
     return `{${mapStr}}`;
+  }
+
+  isEmpty() {
+    return this.hashmap.size === 0;
   }
 };
 
