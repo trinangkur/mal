@@ -79,6 +79,33 @@ const String = class extends MalValue {
   }
 };
 
+const Hashmap = class extends MalValue {
+  constructor(hashmap) {
+    super();
+    this.hashmap = hashmap;
+  }
+
+  pr_str(print_readably = false) {
+    const mapStr = [...this.hashmap.entries()]
+      .map(
+        ([key, value]) =>
+          `${pr_str(key, print_readably)} ${pr_str(value, print_readably)}`
+      )
+      .join(' ');
+
+    return `{${mapStr}}`;
+  }
+};
+
 const NIL = new NilValue();
 
-module.exports = { List, Vector, NIL, Keyword, Symbol, String, pr_str };
+module.exports = {
+  List,
+  Vector,
+  NIL,
+  Keyword,
+  Symbol,
+  String,
+  Hashmap,
+  pr_str,
+};

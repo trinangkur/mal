@@ -1,4 +1,12 @@
-const { List, Vector, NIL, Keyword, Symbol, String } = require('./types');
+const {
+  List,
+  Vector,
+  NIL,
+  Keyword,
+  Symbol,
+  String,
+  Hashmap,
+} = require('./types');
 
 const tokenize = (str) => {
   const tokenizeRegexp = /[\s,]*(~@|[\[\]{}()'`~^@]|"(?:\\.|[^\\"])*"?|;.*|[^\s\[\]{}('"`,;)]*)/g;
@@ -48,6 +56,22 @@ const read_list = (reader) => {
 const read_vector = (reader) => {
   const ast = read_ast(reader, ']');
   return new Vector(ast);
+};
+
+const read_hashmap = (reader) => {
+  const ast = read_ast(reader, '}');
+
+  const map = new Map();
+
+  if (ast.length % 2 !== 0) {
+    throw 'Odd number of hashmap arguments';
+  }
+
+  for (let i = 0; i < ast.length; i += 2) {
+    map.set(ast[i], ast[i + 1]);
+  }
+
+  return new Hashmap(map);
 };
 
 const read_atom = (reader) => {
@@ -102,6 +126,10 @@ const read_form = (reader) => {
     case '[':
       return read_vector(reader);
     case ']':
+      throw 'unbalanced';
+    case '{':
+      return read_hashmap(reader);
+    case '}':
       throw 'unbalanced';
   }
 
