@@ -1,4 +1,4 @@
-const { List, Vector, NIL } = require('./types');
+const { List, Vector, NIL, Keyword, Symbol, String } = require('./types');
 
 const tokenize = (str) => {
   const tokenizeRegexp = /[\s,]*(~@|[\[\]{}()'`~^@]|"(?:\\.|[^\\"])*"?|;.*|[^\s\[\]{}('"`,;)]*)/g;
@@ -65,7 +65,30 @@ const read_atom = (reader) => {
     return NIL;
   }
 
-  return token;
+  if (token === 'true') {
+    return true;
+  }
+
+  if (token === 'false') {
+    return false;
+  }
+
+  if (token.match(/^"(?:\\.|[^\\"])*"$/)) {
+    let str = token.slice(1, -1).replace(/\\(.)/g, (_, c) => {
+      return c === 'n' ? '\n' : c;
+    });
+    return new String(str);
+  }
+
+  if (token.startsWith('"')) {
+    throw 'unbalanced';
+  }
+
+  if (token.startsWith(':')) {
+    return new Keyword(token.slice(1));
+  }
+
+  return new Symbol(token);
 };
 
 const read_form = (reader) => {
