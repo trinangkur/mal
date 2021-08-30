@@ -12,6 +12,10 @@ const NilValue = class extends MalValue {
   pr_str(print_readably = false) {
     return 'nil';
   }
+
+  count() {
+    return 0;
+  }
 };
 
 const List = class extends MalValue {
@@ -27,6 +31,10 @@ const List = class extends MalValue {
   isEmpty() {
     return this.ast.length === 0;
   }
+
+  count() {
+    return this.ast.length;
+  }
 };
 
 const Vector = class extends MalValue {
@@ -41,6 +49,10 @@ const Vector = class extends MalValue {
 
   isEmpty() {
     return this.ast.length === 0;
+  }
+
+  count() {
+    return this.ast.length;
   }
 };
 
@@ -106,6 +118,10 @@ const Hashmap = class extends MalValue {
 
   isEmpty() {
     return this.hashmap.size === 0;
+  }
+
+  count() {
+    return this.ast.size;
   }
 };
 
