@@ -125,6 +125,19 @@ const Hashmap = class extends MalValue {
   }
 };
 
+class Fn extends MalValue {
+  constructor(env, bindings, body) {
+    super();
+    this.env = env;
+    this.bindings = bindings;
+    this.body = body;
+  }
+
+  pr_str(readableForm = false) {
+    return '#<function>';
+  }
+}
+
 const NIL = new NilValue();
 
 module.exports = {
@@ -135,5 +148,6 @@ module.exports = {
   Symbol,
   String,
   Hashmap,
+  Fn,
   pr_str,
 };
