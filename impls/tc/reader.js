@@ -11,7 +11,10 @@ const {
 const tokenize = (str) => {
   const tokenizeRegexp = /[\s,]*(~@|[\[\]{}()'`~^@]|"(?:\\.|[^\\"])*"?|;.*|[^\s\[\]{}('"`,;)]*)/g;
   const matches = [...str.matchAll(tokenizeRegexp)];
-  return matches.map((match) => match[1]).slice(0, -1);
+  return matches
+    .map((match) => match[1])
+    .filter((match) => match[0] !== ';')
+    .slice(0, -1);
 };
 
 const Reader = class {
@@ -31,6 +34,11 @@ const Reader = class {
     }
     return token;
   }
+};
+
+const read_deref = (reader) => {
+  reader.next();
+  return new List([new Symbol('deref'), new Symbol(reader.peek())]);
 };
 
 const read_ast = (reader, endingToken) => {
@@ -131,6 +139,8 @@ const read_form = (reader) => {
       return read_hashmap(reader);
     case '}':
       throw 'unbalanced';
+    case '@':
+      return read_deref(reader);
   }
 
   return read_atom(reader);

@@ -1,6 +1,10 @@
 const MalValue = class {};
 
 const pr_str = (val, print_readably = false) => {
+  if (val instanceof Function) {
+    return '#<function>';
+  }
+
   if (val instanceof MalValue) {
     return val.pr_str(print_readably);
   }
@@ -95,7 +99,7 @@ const String = class extends MalValue {
         '"'
       );
     }
-    return `"${this.string}"`;
+    return `${this.string}`;
   }
 };
 
@@ -126,15 +130,31 @@ const Hashmap = class extends MalValue {
 };
 
 class Fn extends MalValue {
-  constructor(env, bindings, body) {
+  constructor(env, bindings, body, fn) {
     super();
     this.env = env;
     this.bindings = bindings;
     this.body = body;
+    this.fn = fn;
   }
 
-  pr_str(readableForm = false) {
+  pr_str(print_readably = false) {
     return '#<function>';
+  }
+}
+
+class Atom extends MalValue {
+  constructor(value) {
+    super();
+    this.value = value;
+  }
+
+  pr_str(print_readably = false) {
+    return `(atom ${pr_str(this.value, print_readably)})`;
+  }
+
+  reset(value) {
+    return (this.value = value);
   }
 }
 
@@ -149,5 +169,6 @@ module.exports = {
   String,
   Hashmap,
   Fn,
+  Atom,
   pr_str,
 };
